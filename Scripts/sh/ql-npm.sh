@@ -27,11 +27,11 @@ for option in "${options[@]}"; do
 done  
   
 # 读取用户输入  
-read -p "请输入序号（1-4）: " choice  
+read -p "请输入序号（1-6）: " choice  
   
 # 检查输入是否有效  
-if ! [[ $choice =~ ^[1-4]$ ]]; then  
-  echo "输入无效，请输入1-4之间的数字。"  
+if ! [[ $choice =~ ^[1-6]$ ]]; then  
+  echo "输入无效，请输入1-6之间的数字。"  
   exit 1  
 fi  
   
