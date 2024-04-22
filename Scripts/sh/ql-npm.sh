@@ -16,6 +16,8 @@ options=(
   "2. 淘宝源 - https://registry.npmmirror.com/"  
   "3. cnpm源 - https://r.cnpmjs.org/"  
   "4. GitHub源 - https://npm.pkg.github.com/"  
+  "5. 腾讯源 - http://mirrors.cloud.tencent.com/npm/"  
+  "6. 华为源 - https://mirrors.huaweicloud.com/repository/npm/"  
 )  
   
 # 显示选项菜单  
