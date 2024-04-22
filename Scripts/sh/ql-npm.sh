@@ -13,7 +13,7 @@ echo "烟雨阁"
 # 定义四个地址选项及其备注  
 options=(  
   "1. npm 官方源 - https://registry.npmjs.org/"  
-  "2. 淘宝源 - https://registry.npmmirror.com/"  
+  "2. 腾讯源 - http://mirrors.cloud.tencent.com/npm/"  
   "3. cnpm源 - https://r.cnpmjs.org/"  
   "4. GitHub源 - https://npm.pkg.github.com/"  
   "5. 腾讯源 - http://mirrors.cloud.tencent.com/npm/"  
