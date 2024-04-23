@@ -10,7 +10,7 @@
 echo "修复青龙Npm源失效"
 echo "烟雨阁"
 
-# 定义四个地址选项及其备注  
+# 定义六个地址选项及其备注  
 options=(  
   "1. npm 官方源 - https://registry.npmjs.org/"  
   "2. 淘宝源 - https://registry.npmmirror.com/"   
