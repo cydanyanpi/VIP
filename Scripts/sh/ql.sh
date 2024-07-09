@@ -25,7 +25,7 @@ if  [ ! -n "$ql" ] ;then
 else
   echo "您设置的当前版本${ql}"
 fi 
-DOCKER_IMG_NAME="yanyuwangluo/qinglong"
+DOCKER_IMG_NAME="yanyu.icu/yanyuwangluo/qinglong"
 JD_PATH=""
 SHELL_FOLDER=$(pwd)
 CONTAINER_NAME=""
@@ -83,13 +83,27 @@ docker_install() {
             exit 1
         else
             echo "安装 docker 环境..."
-            curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+            bash <(curl -sSL https://git.metauniverse-cn.com/https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/docker.sh)  --install-latested true --source https://mirrors.aliyun.com/docker-ce --source-registry https://registry.cn-hangzhou.aliyuncs.com --close-firewall 
             echo "安装 docker 环境...安装完成!"
+            echo "添加Docker镜像加速器..."
             systemctl enable docker
             systemctl start docker
+           # 添加Docker镜像加速器设置
+            rm -rf /etc/docker/daemon.json
+            touch /etc/docker/daemon.json
+            echo '{
+                "registry-mirrors": [
+                    "https://yanyu.icu",
+                    "https://yanyuge.free.hr"
+                ]
+            }' | sudo tee /etc/docker/daemon.json
+            echo "安装 docker 环境...安装完成!"
+            systemctl daemon-reload
+            systemctl restart docker
         fi
     fi
 }
+
 
 docker_install
 warn "目前因为  jsDelivr 的问题导致部分版本白屏。"

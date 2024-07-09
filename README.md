@@ -5,7 +5,7 @@
 ## 目前一键系列
 ### 一键Dokcer
 ```
-bash <(curl -sSL https://gitee.com/yanyuwangluo/onekey/raw/heihei/Docker.sh)
+bash <(curl -sSL https://git.metauniverse-cn.com/https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/docker.sh)
 ```
 ### 一键青龙2.11.3版本青龙
 ```
