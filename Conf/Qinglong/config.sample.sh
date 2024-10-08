@@ -1,9 +1,8 @@
-## Version: v4.4
-## Date: 2024-03-07
+## Version: v5.0.1
+## Date: 2024-09-18
 ## Mod: Build20240307-001 Faker Repository config
-## Update Content: 可持续发展纲要\n1. session管理破坏性修改\n2. 配置管理可编辑config下文件\n3. 自定义脚本改为查看脚本\n4. 移除互助相关
-
-## 上面版本号中，如果第2位数字有变化，那么代表增加了新的参数，如果只有第3位数字有变化，仅代表更新了注释，没有增加新的参数，可更新可不更新
+## Update Content: 新版青龙（2.17.9）及以上版本适用
+## 任何问题请在频道反馈 @Soucetalk
 
 ## 在运行 ql repo 命令时，是否自动删除失效的脚本与定时任务
 AutoDelCron="true"
@@ -12,45 +11,64 @@ AutoDelCron="true"
 AutoAddCron="true"
 
 ## ql repo命令拉取脚本时需要拉取的文件后缀，直接写文件后缀名即可
-RepoFileExtensions="js py ts so sh"
+RepoFileExtensions="js mjs py pyc sh"
 
-## 由于github仓库拉取较慢，所以会默认添加代理前缀，如不需要请移除
-GithubProxyUrl=""
+## 代理地址，支持HTTP/SOCK5，例如 http://127.0.0.1:7890
+ProxyUrl=""
 
-## 设置定时任务执行的超时时间，默认1h，后缀"s"代表秒(默认值), "m"代表分, "h"代表小时, "d"代表天
-CommandTimeoutTime="3h"
+## 资源告警阙值，默认CPU 80%、内存80%、磁盘90%
+CpuWarn=80
+MemoryWarn=80
+DiskWarn=90
 
-## 设置批量执行任务时的并发数，默认同时执行5个任务
-MaxConcurrentNum="20"
+## 设置定时任务执行的超时时间，例如1h，后缀"s"代表秒(默认值), "m"代表分, "h"代表小时, "d"代表天
+CommandTimeoutTime="1d"
 
-## 在运行 task 命令时，随机延迟启动任务的最大延迟时间
-## 默认给javascript任务加随机延迟，如 RandomDelay="300" ，表示任务将在 1-300 秒内随机延迟一个秒数，然后再运行，取消延迟赋值为空
+## 在运行 task 命令时，随机延迟启动任务的最大延迟时间，如 RandomDelay="300" ，表示任务将在 1-300 秒内随机延迟一个秒数，然后再运行，取消延迟赋值为空
 RandomDelay=""
 
-## 如果你自己会写shell脚本，并且希望在每次运行 ql update 命令时，额外运行你的 shell 脚本，请赋值为 "true"，默认为true
-EnableExtraShell="true"
+## 需要随机延迟运行任务的文件后缀，直接写后缀名即可，多个后缀用空格分开，例如: js py ts
+## 默认仅给javascript任务加随机延迟，其它任务按定时规则准点运行。全部任务随机延迟赋值为空
+RandomDelayFileExtensions=""
+
+## 每小时的第几分钟准点运行任务，当在这些时间运行任务时将忽略 RandomDelay 配置，不会被随机延迟
+## 默认是第0分钟和第30分钟，例如21:00或21:30分的任务将会准点运行。不需要准点运行赋值为空
+RandomDelayIgnoredMinutes=""
+
+## 如果你自己会写shell脚本，并且希望在每次容器启动时，额外运行你的 shell 脚本，请赋值为 "true"
+EnableExtraShell=""
 
 ## 是否自动启动bot，默认不启动，设置为true时自动启动，目前需要自行克隆bot仓库所需代码，存到ql/repo目录下，文件夹命名为dockerbot
-AutoStartBot="true"
+AutoStartBot=""
 
-## 安装bot依赖时指定pip源，默认使用清华源，如不需要源，设置此参数为空
-PipMirror="https://pypi.tuna.tsinghua.edu.cn/simple"
+## 是否使用第三方bot，默认不使用，使用时填入仓库地址，存到ql/repo目录下，文件夹命名为diybot
+BotRepoUrl=""
 
 ## 通知环境变量
+
+
 ## 1. Server酱
-## https://sct.ftqq.com
+## https://sct.ftqq.com/r/13363
 ## 下方填写 SCHKEY 值或 SendKey 值
 export PUSH_KEY=""
 
 ## 2. BARK
 ## 下方填写app提供的设备码，例如：https://api.day.app/123 那么此处的设备码就是123
 export BARK_PUSH=""
+## 下方填写推送图标设置，自定义推送图标(需iOS15或以上)
+export BARK_ICON="https://qn.whyour.cn/logo.png"
 ## 下方填写推送声音设置，例如choo，具体值请在bark-推送铃声-查看所有铃声
 export BARK_SOUND=""
 ## 下方填写推送消息分组，默认为"QingLong"
 export BARK_GROUP="QingLong"
+## bark 推送时效性
+export BARK_LEVEL="active"
+## bark 推送是否存档
+export BARK_ARCHIVE=""
+## bark 推送跳转 URL
+export BARK_URL=""
 
-## 3. Telegram 
+## 3. Telegram
 ## 下方填写自己申请@BotFather的Token，如10xxx4:AAFcqxxxxgER5uw
 export TG_BOT_TOKEN=""
 ## 下方填写 @getuseridbot 中获取到的纯数字ID
@@ -71,11 +89,15 @@ export TG_PROXY_AUTH=""
 ## 如需使用，请赋值代理地址链接，并自行解除下一行的注释
 export TG_API_HOST=""
 
-## 4. 钉钉 
+## 4. 钉钉
 ## 官方文档：https://developers.dingtalk.com/document/app/custom-robot-access
 ## 下方填写token后面的内容，只需 https://oapi.dingtalk.com/robot/send?access_token=XXX 等于=符号后面的XXX即可
 export DD_BOT_TOKEN=""
 export DD_BOT_SECRET=""
+
+## 企业微信反向代理地址
+## (环境变量名 QYWX_ORIGIN)
+export QYWX_ORIGIN=""
 
 ## 5. 企业微信机器人
 ## 官方说明文档：https://work.weixin.qq.com/api/doc/90000/90136/91770
@@ -101,241 +123,128 @@ export PUSH_PLUS_TOKEN=""
 ## 1. 需订阅者扫描二维码 2、如果您是创建群组所属人，也需点击“查看二维码”扫描绑定，否则不能接受群组消息推送
 export PUSH_PLUS_USER=""
 
-## 9. go-cqhttp
-## gobot_url 推送到个人QQ: http://127.0.0.1/send_private_msg  群：http://127.0.0.1/send_group_msg 
+## 9. 微加机器人
+## 官方网站：http://www.weplusbot.com
+## 下方填写您的Token；微信扫描登录后在"我的"->"设置"->"令牌"中获取
+export WE_PLUS_BOT_TOKEN=""
+## 消息接收人；
+## 个人版填写接收消息的群编码，不填发送给自己的微信号
+## 专业版不填默认发给机器人自己，发送给好友填写wxid，发送给微信群填写群编码
+export WE_PLUS_BOT_RECEIVER=""
+## 调用版本；分为专业版和个人版，专业版填写pro，个人版填写personal
+export WE_PLUS_BOT_VERSION="pro"
+
+## 10. go-cqhttp
+## gobot_url 推送到个人QQ: http://127.0.0.1/send_private_msg  群：http://127.0.0.1/send_group_msg
 ## gobot_token 填写在go-cqhttp文件设置的访问密钥
-## gobot_qq 如果GOBOT_URL设置 /send_private_msg 则需要填入 user_id=个人QQ 相反如果是 /send_group_msg 则需要填入 group_id=QQ群 
+## gobot_qq 如果GOBOT_URL设置 /send_private_msg 则需要填入 user_id=个人QQ 相反如果是 /send_group_msg 则需要填入 group_id=QQ群
 ## go-cqhttp相关API https://docs.go-cqhttp.org/api
 export GOBOT_URL=""
 export GOBOT_TOKEN=""
 export GOBOT_QQ=""
 
-## 10. 临时屏蔽某个Cookie
-## 如果某些 Cookie 已经失效了，但暂时还没法更新，可以使用此功能在不删除该Cookie和重新修改Cookie编号的前提下，临时屏蔽掉某些编号的Cookie
-## 多个Cookie编号以半角的空格分隔，两侧一对半角双引号，使用此功能后，在运行js脚本时账户编号将发生变化
-## 举例1：TempBlockCookie="2"    临时屏蔽掉 Cookie2
-## 举例2：TempBlockCookie="2 4"  临时屏蔽掉 Cookie2 和 Cookie4
+## 11. gotify
+## gotify_url 填写gotify地址,如https://push.example.de:8080
+## gotify_token 填写gotify的消息应用token
+## gotify_priority 填写推送消息优先级,默认为0
+export GOTIFY_URL=""
+export GOTIFY_TOKEN=""
+export GOTIFY_PRIORITY=0
 
-## 如果只是想要屏蔽某个 Cookie 不参加某些活动，可以参考下面 case 这个命令的例子来控制
-## case $1 in
-##     *jd_fruit*)                            # 东东农场活动脚本关键词
-##         TempBlockCookie="5"                # Cookie5 不玩东东农场
-##         ;;
-##     *jd_dreamFactory* | *jd_jdfactory*)    # 京喜工厂和东东工厂的活动脚本关键词
-##         TempBlockCookie="2"                # Cookie2 不玩京喜工厂和东东工厂
-##         ;;
-##     *jd_jdzz* | *jd_joy*)                  # 京喜赚赚和宠汪汪的活动脚本关键词
-##         TempBlockCookie="3 7_8 9-10 12~13" # Cookie3 、Cookie7至8、Cookie9至10、Cookie12至13 不玩京东赚赚和宠汪汪
-##         ;;
-##     *)                                     # 必选项。其他活动
-##         TempBlockCookie=""                 # 必选项。默认为空值，表示其他帐号参加全部活动。填写帐号序号表示指定的 Cookie 只能参加之前 case 选项的活动
-##         ;;
-## esac
-case $1 in
-    *jd_fruit*)
-        TempBlockCookie=""
-        ;;
-    *jd_dreamFactory* | *jd_jdfactory*)
-        TempBlockCookie=""
-        ;;
-    *jd_jdzz* | *jd_joy*)
-        TempBlockCookie=""
-        ;;
-    *)
-        TempBlockCookie=""
-        ;;
-esac
+## 12. PushDeer
+## deer_key 填写PushDeer的key
+export DEER_KEY=""
 
-## 11. 随机Cookie
-## Cookie 按随机顺序参加活动。取消 # 注释后，填 1 表示开启功能。
-# RandomMode=""
-## 从原 Cookie 中随机提取指定数量的 Cookie 参加活动，当 RandomMode="1" 时生效。取消 # 注释后，赋值后生效。
-### 赋值要求："空值"、"非数字"、"小于2或大于 Cookie 总数的数值"，均自动调整为全部 Cookie 按随机顺序参加活动；
-###           "大于或等于2，且小于或等于 Cookie 总数的数值"，抽取指定数值的 Cookie 按随机顺序参数活动。
-# ran_num=""
-## 如果想指定活动进行随机模式，可以参考下面 case 这个命令的例子来控制
-## case $1 in
-##     *jd_fruit*)                            # 东东农场活动脚本关键词
-##         RandomMode="1"                     # 东东农场开启随机模式
-##         ran_num=""                         # 东东农场全部 Cookie 按随机顺序参加活动
-##         ;;
-##     *jd_dreamFactory* | *jd_jdfactory*)    # 京喜工厂和东东工厂的活动脚本关键词
-##         RandomMode="1"                     # 京喜工厂和东东工厂开启随机模式
-##         ran_num="5"                        # 京喜工厂和东东工厂抽取指定 5 个 Cookie 按随机顺序参数活动。
-##         ;;
-##    *)                                      # 必选项。其他活动
-##         RandomMode=""                      # 必选项。默认为空值，表示其他帐号均不开启随机模式。
-##         ran_num=""                         # 必选项。默认为空值。若 RandomMode="1" 且此处赋值，表示其他活动均抽取指定数值的 Cookie 按随机顺序参数活动。
-##        ;;
-## esac
-case $1 in
-    *jd_fruit*)
-        RandomMode=""
-        ran_num=""
-        ;;
-    *jd_dreamFactory* | *jd_jdfactory*)
-        RandomMode=""
-        ran_num=""
-        ;;
-    *)
-        RandomMode=""
-        ran_num=""
-        ;;
-esac
+## 13. Chat
+## chat_url 填写synology chat地址，http://IP:PORT/webapi/***token=
+## chat_token 填写后面的token
+export CHAT_URL=""
+export CHAT_TOKEN=""
 
-## 12. 组队环境变量
-### 环境变量填写要求较高，建议群组内确认填写结果
-scr_name="$1"                                 ## 不可删除
-case $1 in
-    *jd_sendBean* | *jd_sddd*)                ## 送豆得豆活动脚本关键词
-        teamer_num="11"                       ## 单个队伍中的总账号数为 11 个
-        team_num="1"                          ## 每个账号发起组队的最大队伍数为 1 个
-        ;;
-    *xmGame*)                                 ## 小米-星空大冒险活动脚本关键词
-        teamer_num="11"                       ## 单个队伍中的总账号数为 11 个
-        team_num="1"                          ## 每个账号发起组队的最大队伍数为 1 个
-        ;;
-    *jd_zdjr*)                                ## 组队瓜分京豆活动脚本关键词
-        teamer_num="5 5 5 5"                  ## 对应各个活动中单个队伍中的总账号数分别为 5 5 5 5 个
-        team_num="2 3 3 5"                    ## 对应各个活动中每个账号发起组队的最大队伍数为 2 3 3 5 个
-        activityId=(                          ## 活动 activityId；需手动抓包。按数组分行填写至括号内
-          54f071f4eb794092a872392696be7d8d
-          0582063f78434ed599becfc8f812c2ee
-          bbda11ba7a9644148d65c8b0b78f0bd2
-          92c03af2ce744f6f94de181ccee15e4f
-        )
-        activityUrl=(                         ## 活动 activityUrl；需手动抓包。按数组分行填写至括号内
-          https://cjhydz-isv.isvjcloud.com
-          https://lzkjdz-isv.isvjcloud.com
-          https://lzkjdz-isv.isvjcloud.com
-          https://cjhydz-isv.isvjcloud.com
-        )
-        ;;
-    *)                                        ## 不可删除
-        scr_name=""                           ## 不可删除
-        ;;                                    ## 不可删除
-esac
+## 14. aibotk
+## 官方说明文档：http://wechat.aibotk.com/oapi/oapi?from=ql
+## aibotk_key (必填)填写智能微秘书个人中心的apikey
+export AIBOTK_KEY=""
+## aibotk_type (必填)填写发送的目标 room 或 contact, 填其他的不生效
+export AIBOTK_TYPE=""
+## aibotk_name (必填)填写群名或用户昵称，和上面的type类型要对应
+export AIBOTK_NAME=""
 
-## 其他需要的变量，脚本中需要的变量使用 export 变量名= 声明即可
+## 15. CHRONOCAT
+## CHRONOCAT_URL 推送 http://127.0.0.1:16530
+## CHRONOCAT_TOKEN 填写在CHRONOCAT文件生成的访问密钥
+## CHRONOCAT_QQ 个人:user_id=个人QQ 群则填入group_id=QQ群 多个用英文;隔开同时支持个人和群 如：user_id=xxx;group_id=xxxx;group_id=xxxxx
+## CHRONOCAT相关API https://chronocat.vercel.app/install/docker/official/
+export CHRONOCAT_URL=""
+export CHRONOCAT_QQ=""
+export CHRONOCAT_TOKEN=""
 
-# 定义每日签到的通知形式
-## js脚本每日签到提供3种通知方式，分别为：
-## 关闭通知，那么请在下方填入0
-## 简洁通知，那么请在下方填入1，其效果见：https://github.com/LXK9301/jd_scripts/blob/master/icon/bean_sign_simple.jpg
-## 原始通知，那么请在下方填入2，如果不填也默认为2，内容比较长，这也是默认通知方式
-NotifyBeanSign=""
+## 16. SMTP
+## JavaScript 参数
+## 邮箱服务名称，比如126、163、Gmail、QQ等，支持列表 https://github.com/nodemailer/nodemailer/blob/master/lib/well-known/services.json
+export SMTP_SERVICE=""
 
-# 定义每日签到每个接口间的延迟时间
-## 默认每个签到接口并发无延迟，如需要依次进行每个接口，请自定义延迟时间，单位为毫秒，延迟作用于每个签到接口, 如填入延迟则切换顺序签到(耗时较长)
-export JD_BEAN_STOP=""
+## Python 参数
+## SMTP 发送邮件服务器，形如 smtp.exmail.qq.com:465
+export SMTP_SERVER=""
+## SMTP 发送邮件服务器是否使用 SSL，填写 true 或 false
+export SMTP_SSL=""
 
-# 脚本推送控制类环境变量
-## 1、京东多合一签到脚本关闭运行结果推送，默认推送，填true表示不推送
-export JD_BEAN_SIGN_STOP_NOTIFY=""
-## 2、京东多合一签到脚本推送简单结果，默认推送完整版结果，填true表示启用简单推送
-export JD_BEAN_SIGN_NOTIFY_SIMPLE="true"
-## 3、东东萌宠关闭推送。填写false为不关闭推送，true为关闭推送
-export PET_NOTIFY_CONTROL="false"
-## 4、京东农场关闭推送。填写false为不关闭推送，true为关闭推送
-export FRUIT_NOTIFY_CONTROL="false"
-## 5、京东领现金关闭推送。填写false为不关闭推送，true为关闭推送
-export CASH_NOTIFY_CONTROL="false"
-## 6、京东摇钱树关闭推送。填写false为不关闭推送，true为关闭推送
-export MONEYTREE_NOTIFY_CONTROL="true"
-## 7、京东点点券关闭推送。填写false为不关闭推送，true为关闭推送
-export DDQ_NOTIFY_CONTROL="false"
-## 8、京东京东赚赚小程序关闭推送。填写false为不关闭推送，true为关闭推送
-export JDZZ_NOTIFY_CONTROL="false"
-## 9、宠汪汪兑换京豆关闭推送。填写false为不关闭推送，true为关闭推送
-export JD_JOY_REWARD_NOTIFY="false"
-## 10、宠汪汪赛跑获胜后是否推送通知。填false为不推送通知消息,true为推送通知消息
-export JOY_RUN_NOTIFY="true"
-## 11、东东超市兑换奖品是否关闭推送通知。填false为不关闭推送,true为关闭推送
-export MARKET_REWARD_NOTIFY="false"
-## 12、京喜财富岛控制是否运行脚本后通知。输入true为通知,不填则为不通知
-export CFD_NOTIFY_CONTROL=""
-## 13、京喜农场岛控制是否运行脚本后通知。0=只通知成熟;1=本次获得水滴>0;2=任务执行;3=任务执行+未种植种子
-export JXNC_NOTIFY_LEVEL="3"
+## smtp_email 填写 SMTP 收发件邮箱，通知将会由自己发给自己
+export SMTP_EMAIL=""
+## smtp_password 填写 SMTP 登录密码，也可能为特殊口令，视具体邮件服务商说明而定
+export SMTP_PASSWORD=""
+## smtp_name 填写 SMTP 收发件人姓名，可随意填写
+export SMTP_NAME=""
 
-# 功能配置类环境变量
-## 1、京东领现金红包兑换京豆开关。false为不换,true为换(花费2元红包兑换200京豆，一周可换四次)，默认为false
-export CASH_EXCHANGE="false"
-## 2、宠汪汪喂食数量。可以填的数字0,10,20,40,80,其他数字不可
-export JOY_FEED_COUNT="80"
-## 3、宠汪汪帮好友喂食。默认 "false" 不会自动给好友的汪汪喂食，如想自动喂食，请修改为 "true"
-export JOY_HELP_FEED="true"
-## 4、宠汪汪是否赛跑(默认参加双人赛跑)。false为不跑,true为跑
-export JOY_RUN_FLAG="true"
-## 5、宠汪汪参加什么级别的赛跑。可选数字为2,10,50，
-## 当JOY_RUN_FLAG不设置或设置为 "true" 时生效
-## 可选值：2,10,50，其他值不可以。其中2代表参加双人PK赛，10代表参加10人突围赛，50代表参加50人挑战赛，不填时默认为2
-## 各个账号间请使用 & 分隔，比如：JOY_TEAM_LEVEL="2&2&50&10"
-## 如果您有5个账号但只写了四个数字，那么第5个账号将默认参加2人赛，账号如果更多，与此类似
-export JOY_TEAM_LEVEL="2&2&50&10"
-## 6、宠汪汪赛跑自己账号内部互助。输入true为开启内部互助
-export JOY_RUN_HELP_MYSELF="true"
-## 7、宠汪汪积分兑换多少京豆。目前可填值为20或者500,脚本默认0,0表示不兑换京豆
-export JD_JOY_REWARD_NAME="500"
-## 8、东东超市兑换京豆数量。目前可输入值为20或者1000，或者其他商品的名称,例如碧浪洗衣凝珠
-export MARKET_COIN_TO_BEANS="超值京豆包"
-## 9、东东超市是否参加pk。true表示参加,false表示不参加
-export JOIN_PK_TEAM="true"
-## 10、东东超市是否用金币抽奖。true表示抽奖,false表示不抽奖
-export SUPERMARKET_LOTTERY="true"
-## 11、东东农场是否使用水滴换豆卡。true表示换,false表示不换
-export FRUIT_BEAN_CARD="true"
-## 12、是否取关商品。环境变量内容的意思依次是是否取关全部商品(0表示一个都不),是否取关全部店铺数(0表示一个都不),遇到此商品不再进行取关,遇到此店铺不再进行取关
-export UN_SUBSCRIBES="300,300,,"
-## 12、jd_unsubscribe这个任务是用来取关每天做任务关注的商品和店铺，默认在每次运行时取关20个商品和20个店铺
-### 如果取关数量不够，可以根据情况增加，还可以设置 jdUnsubscribeStopGoods 和 jdUnsubscribeStopShop 
-### 商品取关数量
-export goodPageSize="30"
-### 店铺取关数量
-export shopPageSize="60"
-### 遇到此商品不再取关此商品以及它后面的商品，需去商品详情页长按拷贝商品信息
-export jdUnsubscribeStopGoods=""
-### 遇到此店铺不再取关此店铺以及它后面的店铺，请从头开始输入店铺名称
-export jdUnsubscribeStopShop=""
-## 13、疯狂的JOY循环助力开关。true表示循环助力,false表示不循环助力，默认不开启循环助力
-export JDJOY_HELPSELF="true"
-## 14、疯狂的JOY京豆兑换。0表示不换,其他按可兑换数填写。目前最小2000
-export JDJOY_APPLYJDBEAN="2000"
-## 15、疯狂的JOY购买joy等级。如需要使用请自行解除注释，可购买等级为 "1~30"
-export BUY_JOY_LEVEL=""
-## 16、摇钱树是否卖出金果。true卖出，false不卖出，默认false
-export MONEY_TREE_SELL_FRUIT="true"
-## 17、东东工厂心仪商品。
-export FACTORAY_WANTPRODUCT_NAME=""
-## 18、东东工厂控制哪个京东账号不运行此脚本。多个使用&连接
-export JDFACTORY_FORBID_ACCOUNT=""
-## 19、京喜工厂控制哪个京东账号不运行此脚本。多个使用&连接
-export DREAMFACTORY_FORBID_ACCOUNT=""
-## 20、lxk0301脚本是否加购。如加设置true
-export PURCHASE_SHOPS="true"
-## 21、京喜工厂拼团瓜分电力活动的activeId（当前需抓包替换或去群里求别人分享）
-export TUAN_ACTIVEID=""
-## 22、京东UA。点点券脚本运行环境变量
-export JD_USER_AGENT=""
-## 23、京东试用jd_try相关环境变量
-### 控制每次获取商品数量，默认12
-export JD_TRY_PAGE_SIZE=""
-### 商品分类，以 @ 隔开，示例：家用电器@手机数码@电脑办公@家居家装
-export JD_TRY_CIDS_KEYS=""
-### 试用类型，以 @ 隔开，示例：免费试用@闪电试
-export JD_TRY_TYPE_KEYS=""
-### 过滤试用商品关键字，以 @ 隔开(默认内置了很多关键字，建议使用默认)
-export JD_TRY_GOOD_FILTERS=""
-### 试用商品最低价格
-export JD_TRY_MIN_PRICE=""
-### 试用商品最多提供数量（过滤垃圾商品）
-export JD_TRY_MAX_SUPPLY_COUNT=""
+## 17. PushMe
+## 官方说明文档：https://push.i-i.me/
+## PUSHME_KEY (必填)填写PushMe APP上获取的push_key
+## PUSHME_URL (选填)填写自建的PushMeServer消息服务接口地址，例如：http://127.0.0.1:3010，不填则使用官方接口服务
+export PUSHME_KEY=""
+export PUSHME_URL=""
 
-# Ninja 环境变量
-## 1、通知黑名单
-### 使用 & 分隔，例如 东东乐园&东东萌宠
-export NOTIFY_SKIP_LIST=""
+## 18. 飞书机器人
+## 官方文档：https://www.feishu.cn/hc/zh-CN/articles/360024984973
+## FSKEY 飞书机器人的 FSKEY
+export FSKEY=""
 
-# Faker2，Faker3库通用环境变量
+## 19. Qmsg酱
+## 官方文档：https://qmsg.zendee.cn/docs/api/
+## qmsg 酱的 QMSG_KEY
+## qmsg 酱的 QMSG_TYPE send 为私聊，group 为群聊
+export QMSG_KEY=""
+export QMSG_TYPE=""
+
+## 20. 自定义通知
+## 自定义通知 接收回调的URL
+export WEBHOOK_URL=""
+## WEBHOOK_BODY 和 WEBHOOK_HEADERS 多个参数时，直接换行或者使用 $'\n' 连接多行字符串，比如 export dd="line 1"$'\n'"line 2"
+export WEBHOOK_BODY=""
+export WEBHOOK_HEADERS=""
+## 支持 GET/POST/PUT
+export WEBHOOK_METHOD=""
+## 支持 text/plain、application/json、multipart/form-data、application/x-www-form-urlencoded
+export WEBHOOK_CONTENT_TYPE=""
+
+# Faker2，Faker3,Faker4库通用代理，SIGN变量
+## 1、非监控类脚本代理设置 具体可查看教程 https://thin-hill-428.notion.site/Faker-fbef0d181f9a444caa7bff125a7e1051?pvs=4
+
+export RS_PROXY_API="刚刚获取的API"
+
+export RS_PROXY_HTTP_DYNAMIC_PROXY_SHOW_ADDRESS="true" # 必填 可以查看代理信息用
+
+export RS_API_WHITELIST=""   # 例：export RS_API_WHITELIST="fruit&car"  # 用&隔开，代表含有‘fruit’，‘car’文件名的脚本会启用API代理。前提是已经填写上述变量才能启用成功。
+
+## 2、监控类脚本代理设置 
+export JD_COMMON_REQUEST_HTTP_DYNAMIC_PROXY_API=""   # 必填 可以查看代理信息用
+
+## 3、自建Sign的变量设置 可查看教程 https://thin-hill-428.notion.site/fcdf576044f94c49915abecb3ef855dd?pvs=4
+export JD_SIGN_API="http://你的服务器ip:32772/sign" # 接口地址
+export JD_SIGN_API_BODY_FIELD="body"  #不动即可
+export JD_SIGN_API_FUNCTIONID_FIEL="fn" #不动即可
+
+# Faker2，Faker3,Faker4库部分通用环境变量，具体环境变量打开脚本上方查看，按格式往下填写即可。
 ## 1、清空购物车
 export JD_CART_REMOVE=""
 export JD_CART_REMOVESIZE=""
@@ -380,3 +289,4 @@ export JDZHBAUTOTX=''
 #是否拉取提现，默认提现抽到奖品
 ## 5、自动评价变量（默认开启自动评价）
 export ONEVAL='true'
+export EVALNUM='100'

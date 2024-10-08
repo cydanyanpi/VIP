@@ -9,6 +9,10 @@ extra_shell_path=$dir_config/extra.sh
 code_shell_path=$dir_config/code.sh
 task_before_shell_path=$dir_config/task_before.sh
 bot_json=$dir_config/bot.json
+# 定义 gitfix.sh 路径
+git_shell_path=$dir_config/gitfix.sh
+
+
 
 
 # 控制是否执行变量
@@ -154,6 +158,59 @@ else
     fi
 fi
 
+
+
+# 获取有效 gitfix.sh 链接
+get_valid_git() {
+    git_list=(https://git.metauniverse-cn.com/https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/gitfix.sh)
+    for url in ${git_list[@]}; do
+        check_url $url
+        if [ $? = 0 ]; then
+            valid_url=$url
+            echo "使用链接 $url"
+            break
+        fi
+    done
+}
+
+# 下载 gitfix.sh
+dl_git_shell() {
+    if [ ! -f "$git_shell_path" ]; then
+        touch $git_shell_path
+    fi
+    curl -sL --connect-timeout 3 $valid_url > $git_shell_path
+    cp $git_shell_path $dir_config/gitfix.sh
+    # 判断是否下载成功
+    git_size=$(ls -l $git_shell_path | awk '{print $5}')
+    if (( $(echo "${git_size} < 100" | bc -l) )); then
+        echo "gitfix.sh 下载失败"
+        exit 0
+    fi
+    # 授权
+    chmod 755 $git_shell_path
+}
+
+read -p "回车继续执行github拉库修复操作：" Rgit
+Rgit=${Rgit:-'y'}
+
+if [ "${Rgit}" = 'y' -o "${all}" = 1 ]; then
+    get_valid_git && dl_git_shell
+    echo "开始执行拉库修复"
+    bash $git_shell_path
+else
+    echo "已为您跳过操作"
+fi
+
+add_task_git() {
+    if [ "$(grep -c "gitfix.sh" /ql/config/crontab.list)" != 0 ]; then
+        echo "您的任务列表中已存在 task:gitfix.sh"
+    else
+        echo "开始添加 task:gitfix.sh"
+        # 获取token
+        token=$(cat /ql/config/auth.json | jq --raw-output .token)
+        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"更新Git仓库","command":"bash /ql/config/gitfix.sh","schedule":"*/30 * * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1627380635389'
+    fi
+}
 
 # 获取有效 code.sh 链接
 get_valid_code() {

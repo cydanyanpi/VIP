@@ -14,19 +14,18 @@ echo -e "\e[36m
 \e[0m\n"
 
 echo -------------------------------
-echo "目前推荐版本 -  我用的2.12.0" 
-echo "2.12.0   |   2.12.2"
+echo "目前推荐版本 -  2.17.9 回车默认安装" 
+echo "2.12.0   |   2.17.9"
 echo -------------------------------
 read -r -p "请输入要安装的青龙版本:" ql
 if  [ ! -n "$ql" ] ;then
- ql="2.12.0"
-# echo "本一键仅支持到2.11.3版本"
+ ql="2.17.9"
  echo "您设置的当前版本${ql}"
 else
   echo "您设置的当前版本${ql}"
 fi 
 echo -------------------------------
-DOCKER_IMG_NAME="yanyu.icu/yanyuwangluo/qinglong"
+DOCKER_IMG_NAME="yanyuwangluo/qinglong"
 JD_PATH=""
 SHELL_FOLDER=$(pwd)
 CONTAINER_NAME=""
@@ -248,7 +247,7 @@ if [ "$port" != "2" ]; then
         read JD_PORT
     done
     echo -e "\e[34m恭喜，端口:$JD_PORT 可用\e[0m"
-    MAPPING_JD_PORT="-p $JD_PORT:5600"
+    MAPPING_JD_PORT="-p $JD_PORT:5700"
 fi
 
 
@@ -281,12 +280,17 @@ if [ $INSTALL_WATCH = true ]; then
 fi
 
 # 检查 config 文件是否存在
-if [ ! -f "$DATA_PATH/config.sh" ]; then
-    docker cp $CONTAINER_NAME:/ql/sample/config.sample.sh $DATA_PATH/config/config.sh
-    if [ $? -ne 0 ] ; then
-        cancelrun "** 错误：找不到配置文件！"
+# 检查是否为 2.17.9 版本，如果不是，则执行配置文件复制操作
+if [ "$ql" != "2.17.9" ]; then
+    if [ ! -f "$DATA_PATH/config.sh" ]; then
+        docker cp $CONTAINER_NAME:/ql/sample/config.sample.sh $DATA_PATH/config/config.sh
+        if [ $? -ne 0 ] ; then
+            cancelrun "** 错误：找不到配置文件！"
+        fi
     fi
- fi
+else
+    echo "当前版本为 2.17.9，不需要复制配置文件"
+fi
 
 log "4.下面列出所有容器"
 docker ps
@@ -308,7 +312,7 @@ if [ "$port" = "2" ]; then
 else
     log "6.安装已完成，请进入面板一次以便进行内部配置"
     log "6.1.用户名和密码已显示，请登录 ip:$JD_PORT"
-    cat $DATA_PATH/config/auth.json
+   # cat $DATA_PATH/config/auth.json
     echo -e "\n"
 fi
 
@@ -339,10 +343,10 @@ if [ "$access" != "2" ]; then
         log "8.开始青龙内部配置"
         docker exec -it $CONTAINER_NAME bash -c "$(curl -fsSL https://git.metauniverse-cn.com/https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/1customCDNN.sh)"
     else
-        warn "8.未检测到 token，取消内部配置"
+        warn "8.未检测到 token，取消内部配置，后续配置去教程看即可"
     fi
 else
     exit 0
 fi
 
-log "/n部署完成了，另外Faker教程内有一键安装依赖脚本，按需使用"
+log "/n部署完成了，另外Faker教程内有一键安装依赖脚本，请继续安装使用"

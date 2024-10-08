@@ -6,7 +6,7 @@
 #dir_shell=/ql/shell
 #. $dir_shell/share.sh
 ## 目录
-dir_root=/ql
+dir_root=/ql/data
 dir_config=$dir_root/config
 dir_scripts=$dir_root/scripts
 dir_log=$dir_root/log
@@ -16,13 +16,10 @@ dir_code=$dir_log/code
 ## 预设的仓库及默认调用仓库设置
 ## 将"repo=$repo4"改成repo=$repo4"或其他，以默认调用其他仓库脚本日志
 ## 也可自行搜索本脚本内的"name_js=("和"name_js_only",将"repo"改成"repo2"或其他，用以自由组合调用仓库的脚本日志
-repo1='panghu999_jd_scripts'                       #预设的 panghu999 仓库
-repo2='JDHelloWorld_jd_scripts'                    #预设的 JDHelloWorld 仓库
-repo3='he1pu_JDHelp'                               #预设的 he1pu 仓库
-repo4='shufflewzc_faker2'                          #预设的 Hyominn_hyominnn 仓库
-repo5='Wenmoux_scripts_wen_chinnkarahoi'           #预设的 Wenmoux 仓库，用于读取口袋书店互助码。需提前拉取温某人的仓库或口袋书店脚本并完整运行。
-repo6='Aaron-lv_sync_jd_scripts'                   #预设的 Aaron-lv 仓库
-repo7='smiek2221_scripts'                          #预设的 smiek2221 仓库
+repo1='shufflewzc_faker2'                       #预设的 Faker2 仓库
+repo2='shufflewzc_faker2'                    #预设的 Faker3 仓库
+repo3='shufflewzc_faker2'                               #预设的 Faker4 仓库
+
 repo=""                                            #空值，表示遍历所有仓库脚本日志
 
 ## 调试模式开关，默认是0，表示关闭；设置为1，表示开启
