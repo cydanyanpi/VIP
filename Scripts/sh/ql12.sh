@@ -81,7 +81,7 @@ docker_install() {
             exit 1
         else
             echo "安装 docker 环境..."
-            bash <(curl -sSL https://git.metauniverse-cn.com/https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/docker.sh)  --install-latested true --source https://mirrors.aliyun.com/docker-ce --source-registry https://registry.cn-hangzhou.aliyuncs.com --close-firewall 
+            bash <(curl -sSL https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/docker.sh)  --install-latested true --source https://mirrors.aliyun.com/docker-ce --source-registry https://registry.cn-hangzhou.aliyuncs.com --close-firewall 
             echo "安装 docker 环境...安装完成!"
             echo "添加Docker镜像加速器..."
            # 添加Docker镜像加速器设置
@@ -341,7 +341,7 @@ echo -e "\n"
 if [ "$access" != "2" ]; then
     if [ "$(grep -c "token" $DATA_PATH/config/auth.json)" != 0 ]; then
         log "8.开始青龙内部配置"
-        docker exec -it $CONTAINER_NAME bash -c "$(curl -fsSL https://git.metauniverse-cn.com/https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/1customCDNN.sh)"
+        docker exec -it $CONTAINER_NAME bash -c "$(curl -fsSL https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/1customCDNN.sh)"
     else
         warn "8.未检测到 token，取消内部配置，后续配置去教程看即可"
     fi
