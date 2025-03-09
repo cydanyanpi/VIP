@@ -15,7 +15,7 @@ echo -e "\e[36m
 
 echo -------------------------------
 echo "目前推荐版本 -  2.17.11 回车默认安装" 
-echo "2.12.0   |   2.18.0"
+echo "2.12.0   |   2.18.2"
 echo -------------------------------
 read -r -p "请输入要安装的青龙版本:" ql
 if  [ ! -n "$ql" ] ;then
@@ -81,7 +81,7 @@ docker_install() {
             exit 1
         else
             echo "安装 docker 环境..."
-            bash <(curl -sSL https://raw.githubusercontent.com/yanyuwangluo/VIP/main/Scripts/sh/docker.sh)  --install-latested true --source https://mirrors.aliyun.com/docker-ce --source-registry https://registry.cn-hangzhou.aliyuncs.com --close-firewall 
+            bash <(curl -sSL https://raw.githubusercontent.com/cydanyanpi/VIP/main/Scripts/sh/docker.sh)  --install-latested true --source https://mirrors.aliyun.com/docker-ce --source-registry https://registry.cn-hangzhou.aliyuncs.com --close-firewall 
             echo "安装 docker 环境...安装完成!"
             echo "添加Docker镜像加速器..."
            # 添加Docker镜像加速器设置
